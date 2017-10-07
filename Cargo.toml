@@ -1,0 +1,6 @@
+[package]
+name = "knapsack-problem"
+version = "0.1.0"
+authors = ["Marián Hlaváč <hlavac95@gmail.com>"]
+
+[dependencies]

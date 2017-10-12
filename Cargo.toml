@@ -4,3 +4,7 @@ version = "0.1.0"
 authors = ["Marián Hlaváč <hlavac95@gmail.com>"]
 
 [dependencies]
+
+[profile.dev]
+opt-level = 0
+debug = true

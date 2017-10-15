@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct KnapItem {
     pub weight: u16,
     pub price: u16,

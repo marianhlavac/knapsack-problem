@@ -18,14 +18,16 @@ fn read_file(file_path: &str) -> BufReader<File> {
 /// Solves knapsack problem instances and measures elapsed time on solving.
 fn main() {
     // Load a instance set file
-    let file = read_file("data/knap_10.inst.dat");
+    let file = read_file("data/knap_15.inst.dat");
     let knapsacks: Vec<Knapsack> = file.lines()
         .map(|line| parser::parse_knapsack(&line.unwrap()))
         .collect();
 
     // Solve whole set and report results
     for knapsack in knapsacks {
-        let solution = solver::solve(&knapsack, solver::SolutionType::Bruteforce);
-        reporter::report_display(&solution);
+        let solution_bf = solver::solve(&knapsack, solver::SolutionType::Bruteforce);
+        reporter::report_display(&solution_bf);
+        let solution_heu = solver::solve(&knapsack, solver::SolutionType::Heuristic);
+        reporter::report_display(&solution_heu);
     }
 }

@@ -12,32 +12,37 @@ pub struct KnapSolution {
     pub elapsed: u16,
 }
 
+enum SolutionType {
+    Bruteforce,
+    Heuristic,
+}
+
+/// Converts bitmask to vector of items. (bitmask is a presence mask)
 fn items_from_bmask(knap: &Knapsack, bitmask: u32) -> Vec<&KnapItem> {
     knap.items.iter().enumerate().filter(|item| {
         bitmask & (1 << item.0) != 0
     }).map(|item| item.1).collect()
 }
 
+/// Converts a vector of items to a presence bitmask.
 fn bitmask_from_items(items: Vec<&KnapItem>) -> u16 {
     return 0
 }
 
+/// Calculate a "fitness" of specified vector of items, returning a tuple
+/// consisting of total items weight and total items price.
 fn calc_fitness(items: Vec<&KnapItem>) -> (u16, u16) {
     items.iter().fold((0, 0), |acc, ref item| (acc.0 + item.weight, acc.1 + item.price))
-    // let mut fit : (u16, u16) = (0, 0);
-    // for item in items {
-    //     fit.0 += item.weight;
-    //     fit.1 += item.price;
-    // }
-    // 
-    // fit
 }
 
+/// Validates a solution. (items weight can't exceed knapsack capacity)
 pub fn validate(solution: &KnapSolution, knap: &Knapsack) -> bool {
     solution.weight <= knap.capacity
 }
 
-pub fn solve_bruteforce(knap: &Knapsack) -> KnapSolution {
+/// Solves an instance of knapsack problem, returning a solution structure.
+/// Types of solutions are Bruteforce and heuristic (sorted by price/weight ratio).
+pub fn solve(knap: &Knapsack, type: SolutionType) -> KnapSolution {
     let start = PreciseTime::now();
     let mut bitmask = 0;
     let mut fitness = calc_fitness(items_from_bmask(knap, bitmask));
@@ -64,15 +69,5 @@ pub fn solve_bruteforce(knap: &Knapsack) -> KnapSolution {
         weight: fitness.0,
         price: fitness.1,
         elapsed: elapsed,
-    }
-}
-
-pub fn solve_heuristic(knap: Knapsack) -> KnapSolution {
-    KnapSolution {
-        knap_id: 0,
-        bitmask: 0,
-        weight: 0,
-        price: 0,
-        elapsed: 0,
     }
 }

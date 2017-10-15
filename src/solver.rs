@@ -1,6 +1,7 @@
 use parser::Knapsack;
 use parser::KnapItem;
-use std::u16;
+use time::{Duration, PreciseTime};
+use std::u32;
 
 #[derive(Debug, Clone, Copy)]
 pub struct KnapSolution {
@@ -8,9 +9,9 @@ pub struct KnapSolution {
     pub bitmask: u16,
     pub price: u16,
     pub weight: u16,
+    pub elapsed: u16,
 }
 
-impl KnapSolution {
     
     
     
@@ -48,6 +49,7 @@ pub fn solve_first(knap: &Knapsack) -> KnapSolution {
 }
 
 pub fn solve_bruteforce(knap: &Knapsack) -> KnapSolution {
+    let start = PreciseTime::now();
     let mut bitmask = 0;
     let mut fitness = calc_fitness(items_from_bmask(knap, bitmask));
     let mut best = (0, 0);
@@ -65,11 +67,14 @@ pub fn solve_bruteforce(knap: &Knapsack) -> KnapSolution {
     
     fitness = calc_fitness(items_from_bmask(knap, best.1));
     
+    let elapsed = start.to(PreciseTime::now()).num_milliseconds() as u16;
+    
     KnapSolution {
         knap_id: knap.id,
         bitmask: bitmask,
         weight: fitness.0,
         price: fitness.1,
+        elapsed: elapsed,
     }
 }
 

@@ -1,11 +1,11 @@
 extern crate time;
 
 mod parser;
-mod solver; 
+mod solver;
 mod reporter;
 use parser::Knapsack;
 use std::fs::File;
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 
 /// Reads a file, returning BufReader in order to parse it after.
 fn read_file(file_path: &str) -> BufReader<File> {
@@ -18,14 +18,14 @@ fn read_file(file_path: &str) -> BufReader<File> {
 /// Solves knapsack problem instances and measures elapsed time on solving.
 fn main() {
     // Load a instance set file
-    let file = read_file("data/knap_15.inst.dat");
-    let knapsacks: Vec<Knapsack> = file.lines().map(|line| {
-        parser::parse_knapsack(&line.unwrap())
-    }).collect();
-    
+    let file = read_file("data/knap_10.inst.dat");
+    let knapsacks: Vec<Knapsack> = file.lines()
+        .map(|line| parser::parse_knapsack(&line.unwrap()))
+        .collect();
+
     // Solve whole set and report results
-    for knapsack in knapsacks { 
-        let solution = solver::solve(&knapsack, Bruteforce);
+    for knapsack in knapsacks {
+        let solution = solver::solve(&knapsack, solver::SolutionType::Bruteforce);
         reporter::report_display(&solution);
     }
 }

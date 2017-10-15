@@ -4,17 +4,19 @@ use time::{Duration, PreciseTime};
 use std::u32;
 
 #[derive(Debug, Clone, Copy)]
+pub enum SolutionType {
+    Bruteforce,
+    Heuristic,
+}
+
+#[derive(Debug, Clone, Copy)]
 pub struct KnapSolution {
     pub knap_id: u16,
     pub bitmask: u32,
     pub price: u16,
     pub weight: u16,
     pub elapsed: u16,
-}
-
-enum SolutionType {
-    Bruteforce,
-    Heuristic,
+    pub soltype: SolutionType,
 }
 
 /// Converts bitmask to vector of items. (bitmask is a presence mask)
@@ -42,7 +44,7 @@ pub fn validate(solution: &KnapSolution, knap: &Knapsack) -> bool {
 
 /// Solves an instance of knapsack problem, returning a solution structure.
 /// Types of solutions are Bruteforce and heuristic (sorted by price/weight ratio).
-pub fn solve(knap: &Knapsack, type: SolutionType) -> KnapSolution {
+pub fn solve(knap: &Knapsack, soltype: SolutionType) -> KnapSolution {
     let start = PreciseTime::now();
     let mut bitmask = 0;
     let mut fitness = calc_fitness(items_from_bmask(knap, bitmask));
@@ -69,5 +71,6 @@ pub fn solve(knap: &Knapsack, type: SolutionType) -> KnapSolution {
         weight: fitness.0,
         price: fitness.1,
         elapsed: elapsed,
+        soltype: soltype,
     }
 }

@@ -6,6 +6,7 @@ mod reporter;
 use parser::Knapsack;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::env;
 
 /// Reads a file, returning BufReader in order to parse it after.
 fn read_file(file_path: &str) -> BufReader<File> {
@@ -17,17 +18,29 @@ fn read_file(file_path: &str) -> BufReader<File> {
 
 /// Solves knapsack problem instances and measures elapsed time on solving.
 fn main() {
-    // Load a instance set file
-    let file = read_file("data/knap_15.inst.dat");
-    let knapsacks: Vec<Knapsack> = file.lines()
-        .map(|line| parser::parse_knapsack(&line.unwrap()))
-        .collect();
-
-    // Solve whole set and report results
-    for knapsack in knapsacks {
-        let solution_bf = solver::solve(&knapsack, solver::SolutionType::Bruteforce);
-        reporter::report_display(&solution_bf);
-        let solution_heu = solver::solve(&knapsack, solver::SolutionType::Heuristic);
-        reporter::report_display(&solution_heu);
+    // Parse CLI arguments
+    let args: Vec<String> = env::args().collect();
+    let mut input_files = args.clone();
+    input_files.remove(0);
+    
+    reporter::report_csv_head();
+    
+    // Load each instance set file
+    for filename in input_files {
+        let file = read_file(&filename);
+        let knapsacks: Vec<Knapsack> = file.lines()
+            .map(|line| parser::parse_knapsack(&line.unwrap()))
+            .collect();
+            
+        // And solve whole set with results reports
+        for knapsack in knapsacks {
+            let solution_bf = solver::solve(&knapsack, solver::SolutionType::Bruteforce);
+            reporter::report_csv(&knapsack, &solution_bf);
+            let solution_heu = solver::solve(&knapsack, solver::SolutionType::Heuristic);
+            reporter::report_csv(&knapsack, &solution_heu);
+        }
     }
+    
+
+    
 }

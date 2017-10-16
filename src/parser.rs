@@ -1,5 +1,6 @@
 #[derive(Debug, Clone, Copy)]
 pub struct KnapItem {
+    pub id: u16,
     pub weight: u16,
     pub price: u16,
 }
@@ -23,8 +24,8 @@ pub fn parse_knapsack(string: &str) -> Knapsack {
         panic!("There should be {} items in the string.", props[1]);
     }
     
-    let items: Vec<KnapItem> = values.chunks(2).map(|chunk| KnapItem { 
-        weight: chunk[0], price: chunk[1] 
+    let items: Vec<KnapItem> = values.chunks(2).enumerate().map(|chunk| KnapItem { 
+        id: chunk.0 as u16, weight: chunk.1[0], price: chunk.1[1] 
     }).collect();
     
     return Knapsack { 

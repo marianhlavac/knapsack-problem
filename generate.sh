@@ -1,2 +1,2 @@
 echo "Generating, give it a while..."
-cargo run --release data/knap_{4,10,15,20}.inst.dat > results.csv
+cargo run --release data/knap_{4,10,15,20,22,25,27}.inst.dat > results.csv

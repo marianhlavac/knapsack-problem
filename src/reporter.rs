@@ -14,7 +14,7 @@ pub fn report_display(knap: &Knapsack, solution: &KnapSolution) {
 }
 
 pub fn report_csv_head() {
-    println!("knap_id,item_count,capacity,sol_type,price,weight,bitmask,elapsed");
+    println!("knap_id,item_count,capacity,sol_type,price,weight,bitmask,elapsed_ms");
 }
 
 pub fn report_csv(knap: &Knapsack, solution: &KnapSolution) {

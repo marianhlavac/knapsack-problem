@@ -1,6 +1,7 @@
 target/
 **/*.rs.bk
 results.csv
+solutions.csv
 
 ### JupyterNotebook ###
 .ipynb_checkpoints

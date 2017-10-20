@@ -66,14 +66,22 @@ fn solve_heuristic(knap: &Knapsack) -> (u16, u16, u32) {
     
     let mut result_items: Vec<&KnapItem> = vec![];
     let mut total_weight = 0;
+    
     for item in items {
         if item.1.weight + total_weight <= knap.capacity {
             result_items.push(item.1);
             total_weight += item.1.weight;
         } else {
-            break;
+            let last_item = result_items.last().unwrap().clone();
+            let total_weight_after = item.1.weight + total_weight - last_item.weight;
+            if last_item.price < item.1.price && total_weight_after <= knap.capacity {
+                result_items.pop();
+                result_items.push(item.1);
+                total_weight = total_weight_after;
+            }
         }
     }
+    
     let fitness = calc_fitness(result_items.clone());
     let bitmask = bitmask_from_items(result_items.clone());
     

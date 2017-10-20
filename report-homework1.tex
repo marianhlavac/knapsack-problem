@@ -14,9 +14,6 @@
 
     
     
-    \usepackage[T1]{fontenc}
-    % Nicer default font (+ math font) than Computer Modern for most use cases
-    \usepackage{mathpazo}
 
     % Basic figure setup, for now with no caption control since it's done
     % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
@@ -274,10 +271,6 @@
 
     \begin{document}
     
-    
-    \maketitle
-    
-    
 
     
     \section{MI-PAA, Úloha 1: Řešení problému batohu metodou hrubé síly a
@@ -327,6 +320,8 @@ Druhým nástrojem je pak \emph{Jupyter Notebook}, ve kterém se poskytnutá
 data zpracují a vizualizují, zapíšou se výsledky těchto měření výpočtů a
 sepíše se zpráva.
 
+\newpage
+
 \subsubsection{Kostra algoritmu}\label{kostra-algoritmu}
 
 Kompletně celý algoritmus je k nahlédnutí ve zdrojových souborech
@@ -375,6 +370,9 @@ programu. Data můžete sami (např. pro kontrolu) získat jednoduchým
 způsobem - spuštěním skriptu \texttt{generate.sh}, který vytvoří soubor
 \texttt{results.csv} obsahující tato data.
 
+
+\newpage
+
 \subsubsection{Sloupce}\label{sloupce}
 
 Názvy sloupců se vyskytují i dále v textu, zde je jejich stručný popis:
@@ -405,33 +403,37 @@ Názvy sloupců se vyskytují i dále v textu, zde je jejich stručný popis:
   \textbf{optimal\_price} - optimální cena batohu
 \end{itemize}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
-        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
-        \PY{k+kn}{import} \PY{n+nn}{matplotlib}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}1}]:}      knap\_id  item\_count  capacity      method  price  weight     bitmask  \textbackslash{}
+        0       9000           4       100  Bruteforce    473      63          11   
+        1       9000           4       100   Heuristic    415      91          12   
+        2       9001           4       100  Bruteforce    326      66          12   
+        3       9001           4       100   Heuristic    326      66          12   
+        4       9002           4       100  Bruteforce    196      89           1   
+        ..       {\ldots}         {\ldots}       {\ldots}         {\ldots}    {\ldots}     {\ldots}         {\ldots}   
+        699     9349          27       350   Heuristic   1377     350    40768454   
+        700     9350          30       400  Bruteforce   2875     393  1056430717   
+        701     9350          30       400   Heuristic    964     400   195587474   
+        702     9351          30       400  Bruteforce   3327     398   448640766   
+        703     9351          30       400   Heuristic   1566     400  1073170761   
         
-        \PY{c+c1}{\PYZsh{} Konfigurace vizualizace dat}
-        \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
-        \PY{n}{matplotlib}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{figure.figsize}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{l+m+mf}{10.0}\PY{p}{,} \PY{l+m+mf}{5.0}\PY{p}{)}
-        \PY{n}{matplotlib}\PY{o}{.}\PY{n}{style}\PY{o}{.}\PY{n}{use}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ggplot}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-        \PY{n}{pd}\PY{o}{.}\PY{n}{options}\PY{o}{.}\PY{n}{display}\PY{o}{.}\PY{n}{max\PYZus{}rows} \PY{o}{=} \PY{l+m+mi}{10}
+                elapsed\_ms  optimal\_price  
+        0         0.007279            473  
+        1         0.004148            473  
+        2         0.001998            326  
+        3         0.000586            326  
+        4         0.001750            196  
+        ..             {\ldots}            {\ldots}  
+        699       0.007884           3019  
+        700  305249.000000           2875  
+        701       0.008099           2875  
+        702  312861.000000           3327  
+        703       0.016862           3327  
         
-        \PY{c+c1}{\PYZsh{} Čtení dat z běhu programu}
-        \PY{n}{raw} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{results.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-        \PY{n}{solutions} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{solutions.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-        
-        \PY{n}{data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{left}\PY{o}{=}\PY{n}{raw}\PY{p}{,} \PY{n}{right}\PY{o}{=}\PY{n}{solutions}\PY{p}{,} \PY{n}{on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{knap\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{item\PYZus{}count\PYZus{}y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-        \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}
-                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price\PYZus{}x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
-                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price\PYZus{}y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{optimal\PYZus{}price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} 
-                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{item\PYZus{}count\PYZus{}x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{item\PYZus{}count}\PY{l+s+s1}{\PYZsq{}}
-                    \PY{p}{\PYZcb{}}\PY{p}{)}
-        
-        \PY{n}{data}
+        [704 rows x 9 columns]
 \end{Verbatim}
-
-
+            
     \subsection{Výsledky měření}\label{vuxfdsledky-mux11bux159enuxed}
 
 Níže jsou uvedeny výsledky derivované z dat. Rychlosti řešení jsou
@@ -447,24 +449,29 @@ Měření hrubou silou je výpočetně náročná metoda. Složitost je
 \texttt{O(2\^{}n)}, takže lze očekávat rapidně vzrůstající trend doby
 nutné pro dokončení výpočtu touto metodou.
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Výpis dat pro bruteforce metodu}
-        \PY{n}{bruteforce} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{method}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Bruteforce}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-        \PY{n}{mean\PYZus{}bruteforce} \PY{o}{=} \PY{n}{bruteforce}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{item\PYZus{}count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{elapsed\PYZus{}ms}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
-        
-        \PY{n}{mean\PYZus{}bruteforce}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}2}]:}                elapsed\_ms
+        item\_count               
+        4                0.001655
+        10               0.194171
+        15               7.060000
+        20             269.920000
+        22            1111.440000
+        25            9100.080000
+        27           37292.540000
+        30          309055.000000
 \end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Vykreslení grafu dat pro bruteforce metodu}
-        \PY{n}{mean\PYZus{}bruteforce}\PY{o}{.}\PY{n}{plot}\PY{p}{(}
-            \PY{n}{title} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Závislost výpočetního času hrubou silou na n (počtu předmětů)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-            \PY{n}{kind} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bar}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-        \PY{p}{)}
+            
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}3}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x10958ed30>
 \end{Verbatim}
-
-
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{report-homework1_files/report-homework1_7_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     Na výsledných datech lze pozorovat velmi rychle vzrůstající časovou
 závislost na počtu předmětů.
 
@@ -496,24 +503,29 @@ Zbytek algoritmu po seřazení je lineární (složitost v této části
 nezávisí na \textbf{n}, tedy počtu předmětů, ale na kapacitě batohu a
 velikosti předmětů - irelevantní pro naše pozorování).
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Výpis dat pro heuristickou metodu}
-        \PY{n}{heuristic} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{method}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Heuristic}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-        \PY{n}{mean\PYZus{}heuristic} \PY{o}{=} \PY{n}{heuristic}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{item\PYZus{}count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{elapsed\PYZus{}ms}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
-        
-        \PY{n}{mean\PYZus{}heuristic}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}4}]:}             elapsed\_ms
+        item\_count            
+        4             0.000540
+        10            0.001171
+        15            0.002403
+        20            0.006412
+        22            0.007157
+        25            0.007743
+        27            0.009636
+        30            0.012481
 \end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Vykreslení grafu pro heuristickou metodu}
-        \PY{n}{mean\PYZus{}heuristic}\PY{o}{.}\PY{n}{cumsum}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{p}{(}
-            \PY{n}{title} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Závislost výpočetního času heuristikou na n (počtu předmětů)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-            \PY{n}{kind} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bar}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-        \PY{p}{)}
+            
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}5}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x105d2a278>
 \end{Verbatim}
-
-
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{report-homework1_files/report-homework1_11_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     Na grafu lze pozorovat lineární vzrůst výpočetního času při vzrůstu
 počtu předmětů. Rozdíl je však v relativně nepatrný. Na grafu je
 důležité si všimnout rozsahu vertikální osy, která se se pohybuje v
@@ -538,59 +550,60 @@ Relativní chybou lze určit úspěšnost heuristického výpočtu vůči
 exaktního výpočtu hrubou silou. Relativní chyby jsou uvedeny v
 procentech.
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{n}{pd}\PY{o}{.}\PY{n}{options}\PY{o}{.}\PY{n}{mode}\PY{o}{.}\PY{n}{chained\PYZus{}assignment} \PY{o}{=} \PY{k+kc}{None}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}6}]:}      knap\_id  item\_count  optimal\_price  price  error  relative\_error\_\%
+        1       9000           4            473    415     58         12.262156
+        3       9001           4            326    326      0          0.000000
+        5       9002           4            196    196      0          0.000000
+        7       9003           4            545    437    108         19.816514
+        9       9004           4            243    243      0          0.000000
+        ..       {\ldots}         {\ldots}            {\ldots}    {\ldots}    {\ldots}               {\ldots}
+        695     9347          27           2545   1049   1496         58.781925
+        697     9348          27           2846   1563   1283         45.080815
+        699     9349          27           3019   1377   1642         54.388870
+        701     9350          30           2875    964   1911         66.469565
+        703     9351          30           3327   1566   1761         52.930568
         
-        \PY{c+c1}{\PYZsh{} Výpočet absolutních a relativních chyb u každého výpočtu heuristickou metodou}
-        \PY{n}{heuristic\PYZus{}data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{method}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Heuristic}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-        \PY{n}{heuristic\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{heuristic\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{optimal\PYZus{}price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{heuristic\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-        \PY{n}{heuristic\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{relative\PYZus{}error\PYZus{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{heuristic\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{/} \PY{n}{heuristic\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{optimal\PYZus{}price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{100}
-        
-        \PY{n}{heuristic\PYZus{}data}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{knap\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{item\PYZus{}count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{optimal\PYZus{}price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{price}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{relative\PYZus{}error\PYZus{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+        [352 rows x 6 columns]
 \end{Verbatim}
 
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Zpracování relativních chyb pro každý počet předmětů jednotlivě}
-        \PY{n}{mean\PYZus{}vals} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-        \PY{n}{rows\PYZus{}cnt} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-        \PY{n}{max\PYZus{}vals} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
-        
-        \PY{k}{for} \PY{n}{index}\PY{p}{,} \PY{n}{row} \PY{o+ow}{in} \PY{n}{heuristic\PYZus{}data}\PY{o}{.}\PY{n}{iterrows}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-            \PY{n}{out\PYZus{}id} \PY{o}{=} \PY{n}{row}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{item\PYZus{}count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-            \PY{n}{error} \PY{o}{=} \PY{n}{row}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{relative\PYZus{}error\PYZus{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\newpage
+
             
-            \PY{n}{mean\PYZus{}vals}\PY{p}{[}\PY{n}{out\PYZus{}id}\PY{p}{]} \PY{o}{=} \PY{n}{mean\PYZus{}vals}\PY{p}{[}\PY{n}{out\PYZus{}id}\PY{p}{]} \PY{o}{+} \PY{n}{error} \PY{k}{if} \PY{n}{out\PYZus{}id} \PY{o+ow}{in} \PY{n}{mean\PYZus{}vals} \PY{k}{else} \PY{n}{error}
-            \PY{n}{rows\PYZus{}cnt}\PY{p}{[}\PY{n}{out\PYZus{}id}\PY{p}{]} \PY{o}{=} \PY{n}{rows\PYZus{}cnt}\PY{p}{[}\PY{n}{out\PYZus{}id}\PY{p}{]} \PY{o}{+} \PY{l+m+mi}{1} \PY{k}{if} \PY{n}{out\PYZus{}id} \PY{o+ow}{in} \PY{n}{rows\PYZus{}cnt} \PY{k}{else} \PY{l+m+mi}{1}
-            \PY{k}{if} \PY{n}{out\PYZus{}id} \PY{o+ow}{in} \PY{n}{max\PYZus{}vals}\PY{p}{:}
-                \PY{n}{max\PYZus{}vals}\PY{p}{[}\PY{n}{out\PYZus{}id}\PY{p}{]} \PY{o}{=} \PY{n}{error} \PY{k}{if} \PY{n}{error} \PY{o}{\PYZgt{}} \PY{n}{max\PYZus{}vals}\PY{p}{[}\PY{n}{out\PYZus{}id}\PY{p}{]} \PY{k}{else} \PY{n}{max\PYZus{}vals}\PY{p}{[}\PY{n}{out\PYZus{}id}\PY{p}{]}
-            \PY{k}{else}\PY{p}{:}
-                \PY{n}{max\PYZus{}vals}\PY{p}{[}\PY{n}{out\PYZus{}id}\PY{p}{]} \PY{o}{=} \PY{n}{error}
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}7}]:}     avg\_rel\_error\_\%  max\_rel\_error\_\%
+        4          9.125447        72.727273
+        10        26.621721        61.094819
+        15        27.724194        56.969697
+        20        45.451606        69.780220
+        22        50.922441        71.792657
+        25        51.913568        69.696970
+        27        49.994587        63.565062
+        30        59.700067        66.469565
+\end{Verbatim}
+      
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}8}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x1097b5ba8>
+\end{Verbatim}
             
-        \PY{k}{for} \PY{n}{index}\PY{p}{,} \PY{n}{row} \PY{o+ow}{in} \PY{n}{mean\PYZus{}vals}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-            \PY{n}{mean\PYZus{}vals}\PY{p}{[}\PY{n}{index}\PY{p}{]} \PY{o}{=} \PY{n}{row} \PY{o}{/} \PY{n}{rows\PYZus{}cnt}\PY{p}{[}\PY{n}{index}\PY{p}{]}
-        
-        \PY{n}{relative\PYZus{}errors} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{avg\PYZus{}rel\PYZus{}error\PYZus{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{mean\PYZus{}vals}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}rel\PYZus{}error\PYZus{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{max\PYZus{}vals}\PY{p}{\PYZcb{}}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} Výpis průměru a maxima relativní chyby pro každý počet předmětů}
-        \PY{n}{relative\PYZus{}errors}
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{report-homework1_files/report-homework1_16_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}9}]:}       avg\_rel\_error\_\%
+        mean        40.181704
+        std         17.161356
+        min          9.125447
+        25\%         27.448576
+        50\%         47.723097
+        75\%         51.170223
+        max         59.700067
 \end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{n}{relative\PYZus{}errors}\PY{o}{.}\PY{n}{plot}\PY{p}{(}
-            \PY{n}{title} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Relativní chyba v procentech v závislosti na n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-            \PY{n}{kind} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bar}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-        \PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Statistiky pro všechny počty předmětů dohromady}
-        \PY{n}{relative\PYZus{}errors}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{avg\PYZus{}rel\PYZus{}error\PYZus{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
-\end{Verbatim}
-
-
+            
     Na grafu lze pozorovat mírně vzrůstající trend průměrné relativní chyby
 při vzrůstajícím počtu předmětů. O lineární vzrůst však s největší
 pravděpodobností nepůjde a dalo by se spíše předpokládat, že hodnota

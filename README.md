@@ -1,5 +1,12 @@
 # Knapsack problem (Task 1 for MI-PAA subject on FIT CTU)
 
+Tex file edited:
+
+```
+  Just run
+  $ xelatex report-homework1.tex
+```
+
 ## How to build
 
 Rust and Jupyter is required.

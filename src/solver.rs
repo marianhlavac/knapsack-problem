@@ -62,7 +62,7 @@ fn solve_bruteforce(knap: &Knapsack) -> (u16, u16, u32) {
 
 fn solve_heuristic(knap: &Knapsack) -> (u16, u16, u32) {
     let mut items: Vec<(usize, &KnapItem)> = knap.items.iter().enumerate().collect();
-    items.sort_by(|a, b| (a.1.price / a.1.weight).cmp(&(b.1.price / b.1.weight)));
+    items.sort_unstable_by(|a, b| (a.1.price / a.1.weight).cmp(&(b.1.price / b.1.weight)));
     
     let mut result_items: Vec<&KnapItem> = vec![];
     let mut total_weight = 0;

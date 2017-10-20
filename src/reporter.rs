@@ -1,8 +1,8 @@
 use parser::{Knapsack, KnapItem};
-use solver::KnapSolution;
+use solver::{KnapSolution, validate};
 
 pub fn report_display(knap: &Knapsack, solution: &KnapSolution) {
-    println!("KNAP_ID: {}\tSIZE: {}\t{:?}\tPRICE: {}\tWEIGHT: {}/{}\tELAPSED: {}ms", 
+    println!("KNAP_ID: {}\tSIZE: {}\t{:?}\tPRICE: {}\tWEIGHT: {}/{}\tELAPSED: {}ms\t{}VALID", 
         knap.id,
         knap.items.len(),
         solution.soltype,
@@ -10,6 +10,7 @@ pub fn report_display(knap: &Knapsack, solution: &KnapSolution) {
         solution.weight,
         knap.capacity,
         solution.elapsed,
+        solver::validate(solution) ? "" : "IN",
     );
 }
 

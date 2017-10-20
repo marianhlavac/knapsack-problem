@@ -10,7 +10,7 @@ pub fn report_display(knap: &Knapsack, solution: &KnapSolution) {
         solution.weight,
         knap.capacity,
         solution.elapsed,
-        solver::validate(solution) ? "" : "IN",
+        if validate(solution, knap) { "" } else { "IN" },
     );
 }
 

@@ -3,7 +3,10 @@ extern crate time;
 mod parser;
 mod solver;
 mod reporter;
-use parser::Knapsack;
+mod solver_recursive;
+mod solver_branchandbound;
+
+use parser::{Knapsack, SolutionType};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::env;
@@ -23,8 +26,6 @@ fn main() {
     let mut input_files = args.clone();
     input_files.remove(0);
     
-    reporter::report_csv_head();
-    
     // Load each instance set file
     for filename in input_files {
         let file = read_file(&filename);
@@ -32,15 +33,14 @@ fn main() {
             .map(|line| parser::parse_knapsack(&line.unwrap()))
             .collect();
             
+        reporter::header_csv();
+            
         // And solve whole set with results reports
         for knapsack in knapsacks {
-            let solution_bf = solver::solve(&knapsack, solver::SolutionType::Bruteforce);
-            reporter::report_csv(&knapsack, &solution_bf);
-            let solution_heu = solver::solve(&knapsack, solver::SolutionType::Heuristic);
-            reporter::report_csv(&knapsack, &solution_heu);
+            let solved = solver::solve(&knapsack, SolutionType::Recursive);
+            reporter::report_csv(&solved, SolutionType::Recursive);
+            let solved2 = solver::solve(&knapsack, SolutionType::BranchAndBound);
+            reporter::report_csv(&solved2, SolutionType::BranchAndBound);
         }
     }
-    
-
-    
 }

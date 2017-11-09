@@ -5,11 +5,20 @@ pub struct KnapItem {
     pub price: u16,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
+pub enum SolutionType {
+    Recursive,
+    BranchAndBound,
+}
+
+#[derive(Debug, Clone)]
 pub struct Knapsack {
     pub id: u16,
     pub capacity: u16,
     pub items: Vec<KnapItem>,
+    pub config: (u16, u16),
+    pub price: u16,
+    pub elapsed: f32,
 }
 
 fn parse_num(val: &str) -> u16 {
@@ -27,10 +36,14 @@ pub fn parse_knapsack(string: &str) -> Knapsack {
     let items: Vec<KnapItem> = values.chunks(2).enumerate().map(|chunk| KnapItem { 
         id: chunk.0 as u16, weight: chunk.1[0], price: chunk.1[1] 
     }).collect();
+    let items_count = items.len() as u16;
     
     return Knapsack { 
         id: props[0], 
         capacity: props[2], 
         items: items,
+        config: (props[2], items_count),
+        price: 0,
+        elapsed: 0.0,
     };
 }

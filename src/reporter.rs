@@ -1,32 +1,28 @@
-use parser::{Knapsack, KnapItem};
-use solver::{KnapSolution, validate};
+use parser::{Knapsack, SolutionType};
 
-pub fn report_display(knap: &Knapsack, solution: &KnapSolution) {
-    println!("KNAP_ID: {}\tSIZE: {}\t{:?}\tPRICE: {}\tWEIGHT: {}/{}\tELAPSED: {}ms\t{}VALID", 
+#[allow(dead_code)]
+pub fn report_display(knap: &Knapsack, solution: SolutionType) {
+    println!("#{}\tcfg {:?}\t${}\t{} ms\t{:?}", 
         knap.id,
-        knap.items.len(),
-        solution.soltype,
-        solution.price,
-        solution.weight,
-        knap.capacity,
-        solution.elapsed,
-        if validate(solution, knap) { "" } else { "IN" },
+        knap.config,
+        knap.price,
+        knap.elapsed,
+        solution,
     );
 }
 
-pub fn report_csv_head() {
-    println!("knap_id,item_count,capacity,method,price,weight,bitmask,elapsed_ms");
+#[allow(dead_code)]
+pub fn header_csv() {
+    println!("id,solution_type,item_count,price,elapsed_ms");
 }
 
-pub fn report_csv(knap: &Knapsack, solution: &KnapSolution) {
-    println!("{},{},{},{:?},{},{},{},{}", 
+#[allow(dead_code)]
+pub fn report_csv(knap: &Knapsack, solution: SolutionType) {
+    println!("{},{:?},{},{},{}",
         knap.id,
-        knap.items.len(),
-        knap.capacity,
-        solution.soltype,
-        solution.price,
-        solution.weight,
-        solution.bitmask,
-        solution.elapsed,
+        solution,
+        knap.config.1,
+        knap.price,
+        knap.elapsed,
     );
 }

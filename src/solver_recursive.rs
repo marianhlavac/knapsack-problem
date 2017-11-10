@@ -1,4 +1,8 @@
-use parser::Knapsack;
+use parser::{Knapsack, KnapItem};
+
+pub fn sum_of_prices(items: &Vec<KnapItem>) -> u16 {
+    items.iter().fold(0, |acc, &x| acc + x.price)
+}
 
 pub fn split_knapsacks(knap: &Knapsack) -> (Knapsack, Knapsack) {
     let mut new_items = knap.items.clone();

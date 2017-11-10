@@ -1,9 +1,5 @@
-use parser::{Knapsack, KnapItem};
+use parser::Knapsack;
 use solver_recursive;
-
-fn sum_of_prices(items: &Vec<KnapItem>) -> u16 {
-    items.iter().fold(0, |acc, &x| acc + x.price)
-}
 
 fn solve_recurr(knap: Knapsack, best: &mut u16, reward_left: u16) -> Knapsack {
     // Finish when depth is maximum
@@ -34,6 +30,6 @@ fn solve_recurr(knap: Knapsack, best: &mut u16, reward_left: u16) -> Knapsack {
 
 pub fn solve(knap: Knapsack) -> Knapsack {    
     let mut best = 0;
-    let total_reward = sum_of_prices(&knap.items);
+    let total_reward = solver_recursive::sum_of_prices(&knap.items);
     solve_recurr(knap, &mut best, total_reward)
 }

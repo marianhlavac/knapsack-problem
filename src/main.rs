@@ -5,6 +5,7 @@ mod solver;
 mod reporter;
 mod solver_recursive;
 mod solver_branchandbound;
+mod solver_dynamic;
 
 use parser::{Knapsack, SolutionType};
 use std::fs::File;
@@ -41,6 +42,8 @@ fn main() {
             reporter::report_csv(&solved, SolutionType::Recursive);
             let solved2 = solver::solve(&knapsack, SolutionType::BranchAndBound);
             reporter::report_csv(&solved2, SolutionType::BranchAndBound);
+            let solved3 = solver::solve(&knapsack, SolutionType::Dynamic);
+            reporter::report_csv(&solved3, SolutionType::Dynamic);
         }
     }
 }

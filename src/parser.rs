@@ -9,6 +9,7 @@ pub struct KnapItem {
 pub enum SolutionType {
     Recursive,
     BranchAndBound,
+    Dynamic,
 }
 
 #[derive(Debug, Clone)]

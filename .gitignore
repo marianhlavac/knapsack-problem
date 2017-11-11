@@ -2,6 +2,8 @@ target/
 **/*.rs.bk
 results.csv
 solutions.csv
+/report*
+!report*.ipynb
 
 ### JupyterNotebook ###
 .ipynb_checkpoints

@@ -6,6 +6,7 @@ mod reporter;
 mod solver_recursive;
 mod solver_branchandbound;
 mod solver_dynamic;
+mod solver_fptas;
 
 use parser::{Knapsack, SolutionType};
 use std::fs::File;
@@ -27,6 +28,9 @@ fn main() {
     let mut input_files = args.clone();
     input_files.remove(0);
     
+    let delimiter = "\t\t\t";
+    reporter::header_csv(delimiter);
+    
     // Load each instance set file
     for filename in input_files {
         let file = read_file(&filename);
@@ -34,16 +38,20 @@ fn main() {
             .map(|line| parser::parse_knapsack(&line.unwrap()))
             .collect();
             
-        reporter::header_csv();
-            
         // And solve whole set with results reports
         for knapsack in knapsacks {
-            let solved = solver::solve(&knapsack, SolutionType::Recursive);
-            reporter::report_csv(&solved, SolutionType::Recursive);
-            let solved2 = solver::solve(&knapsack, SolutionType::BranchAndBound);
-            reporter::report_csv(&solved2, SolutionType::BranchAndBound);
-            let solved3 = solver::solve(&knapsack, SolutionType::Dynamic);
-            reporter::report_csv(&solved3, SolutionType::Dynamic);
+            let recursive = solver::solve(&knapsack, SolutionType::Recursive);
+            reporter::report_csv(&recursive, SolutionType::Recursive, delimiter);
+            let brandbound = solver::solve(&knapsack, SolutionType::BranchAndBound);
+            reporter::report_csv(&brandbound, SolutionType::BranchAndBound, delimiter);
+            let dynamic = solver::solve(&knapsack, SolutionType::Dynamic);
+            reporter::report_csv(&dynamic, SolutionType::Dynamic, delimiter);
+            let fptas25 = solver::solve(&knapsack, SolutionType::FPTAS25);
+            reporter::report_csv(&fptas25, SolutionType::FPTAS25, delimiter);
+            let fptas50 = solver::solve(&knapsack, SolutionType::FPTAS50);
+            reporter::report_csv(&fptas50, SolutionType::FPTAS50, delimiter);
+            let fptas75 = solver::solve(&knapsack, SolutionType::FPTAS75);
+            reporter::report_csv(&fptas75, SolutionType::FPTAS75, delimiter);
         }
     }
 }

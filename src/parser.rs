@@ -10,6 +10,9 @@ pub enum SolutionType {
     Recursive,
     BranchAndBound,
     Dynamic,
+    FPTAS25,
+    FPTAS50,
+    FPTAS75,
 }
 
 #[derive(Debug, Clone)]

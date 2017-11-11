@@ -13,14 +13,14 @@ pub fn report_display(knap: &Knapsack, solution: SolutionType) {
 
 #[allow(dead_code)]
 pub fn header_csv(delimiter: &str) {
-    println!("knap_id{}sol_type{}item_count{}price{}elapsed_ms",
+    println!("knap_id{}method{}item_count{}price{}elapsed_ms",
         delimiter, delimiter, delimiter, delimiter);
 }
 
 #[allow(dead_code)]
 pub fn report_csv(knap: &Knapsack, solution: SolutionType, delimiter: &str) {
     let mut stype = String::from(format!("{:?}", solution));
-    stype.truncate(7);
+    //stype.truncate(7);
     
     println!("{}{}{}{}{}{}{}{}{}",
         knap.id, delimiter,

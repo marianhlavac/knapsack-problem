@@ -28,7 +28,7 @@ fn main() {
     let mut input_files = args.clone();
     input_files.remove(0);
     
-    let delimiter = "\t\t\t";
+    let delimiter = ",";
     reporter::header_csv(delimiter);
     
     // Load each instance set file

@@ -13,7 +13,7 @@ pub fn report_display(knap: &Knapsack, solution: SolutionType) {
 
 #[allow(dead_code)]
 pub fn header_csv(delimiter: &str) {
-    println!("id{}sol_type{}item_count{}price{}elapsed_ms",
+    println!("knap_id{}sol_type{}item_count{}price{}elapsed_ms",
         delimiter, delimiter, delimiter, delimiter);
 }
 

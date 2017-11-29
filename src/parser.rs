@@ -7,6 +7,7 @@ pub struct KnapItem {
 
 #[derive(Debug, Clone, Copy)]
 pub enum SolutionType {
+    None,
     Recursive,
     BranchAndBound,
     Dynamic,

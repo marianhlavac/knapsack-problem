@@ -29,7 +29,30 @@ fn main() {
     input_files.remove(0);
     
     let delimiter = ",";
+    let mut methods = Vec::new();
     reporter::header_csv(delimiter);
+    
+    // Check CLI arguments for settings string
+    if input_files[0].starts_with("opt:") {
+        let options = input_files[0].split_off(4);
+        
+        options.chars().for_each(|option| match option {
+            'r' => methods.push(SolutionType::Recursive),
+            'b' => methods.push(SolutionType::BranchAndBound),
+            'd' => methods.push(SolutionType::Dynamic),
+            'f' => methods.push(SolutionType::FPTAS50),
+            'h' => methods.push(SolutionType::Recursive),
+            _ => (),
+        });
+        
+        input_files.remove(0);
+    } else {
+        methods = vec!(
+            SolutionType::Recursive, 
+            SolutionType::BranchAndBound, 
+            SolutionType::Dynamic,
+        );
+    }
     
     // Load each instance set file
     for filename in input_files {
@@ -40,18 +63,10 @@ fn main() {
             
         // And solve whole set with results reports
         for knapsack in knapsacks {
-            let recursive = solver::solve(&knapsack, SolutionType::Recursive);
-            reporter::report_csv(&recursive, SolutionType::Recursive, delimiter);
-            let brandbound = solver::solve(&knapsack, SolutionType::BranchAndBound);
-            reporter::report_csv(&brandbound, SolutionType::BranchAndBound, delimiter);
-            let dynamic = solver::solve(&knapsack, SolutionType::Dynamic);
-            reporter::report_csv(&dynamic, SolutionType::Dynamic, delimiter);
-            let fptas25 = solver::solve(&knapsack, SolutionType::FPTAS25);
-            reporter::report_csv(&fptas25, SolutionType::FPTAS25, delimiter);
-            let fptas50 = solver::solve(&knapsack, SolutionType::FPTAS50);
-            reporter::report_csv(&fptas50, SolutionType::FPTAS50, delimiter);
-            let fptas75 = solver::solve(&knapsack, SolutionType::FPTAS75);
-            reporter::report_csv(&fptas75, SolutionType::FPTAS75, delimiter);
+            for method in &methods {
+                let results = solver::solve(&knapsack, *method);
+                reporter::report_csv(&results, *method, delimiter);
+            }
         }
     }
 }

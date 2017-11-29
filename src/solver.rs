@@ -17,6 +17,7 @@ pub fn solve(knap: &Knapsack, soltype: SolutionType) -> Knapsack {
         SolutionType::FPTAS25 => solver_fptas::solve(knap.clone(), 0.25),
         SolutionType::FPTAS50 => solver_fptas::solve(knap.clone(), 0.5),
         SolutionType::FPTAS75 => solver_fptas::solve(knap.clone(), 0.75),
+        SolutionType::None => knap.clone(),
     };
     
     let elapsed_t = start.to(PreciseTime::now());

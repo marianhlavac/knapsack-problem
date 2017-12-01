@@ -10,6 +10,7 @@ pub enum SolutionType {
     None,
     Recursive,
     BranchAndBound,
+    Heuristic,
     Dynamic,
     FPTAS25,
     FPTAS50,

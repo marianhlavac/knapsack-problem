@@ -7,6 +7,7 @@ mod solver_recursive;
 mod solver_branchandbound;
 mod solver_dynamic;
 mod solver_fptas;
+mod solver_heuristic;
 
 use parser::{Knapsack, SolutionType};
 use std::fs::File;
@@ -41,7 +42,7 @@ fn main() {
             'b' => methods.push(SolutionType::BranchAndBound),
             'd' => methods.push(SolutionType::Dynamic),
             'f' => methods.push(SolutionType::FPTAS50),
-            'h' => methods.push(SolutionType::Recursive),
+            'h' => methods.push(SolutionType::Heuristic),
             _ => (),
         });
         

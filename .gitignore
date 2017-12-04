@@ -3,6 +3,7 @@ target/
 results.csv
 solutions.csv
 /report*
+!report-assets/
 !report*.ipynb
 
 ### JupyterNotebook ###

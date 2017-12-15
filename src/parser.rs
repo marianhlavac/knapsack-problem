@@ -15,6 +15,7 @@ pub enum SolutionType {
     FPTAS25,
     FPTAS50,
     FPTAS75,
+    Evolution,
 }
 
 #[derive(Debug, Clone)]
@@ -52,4 +53,8 @@ pub fn parse_knapsack(string: &str) -> Knapsack {
         price: 0,
         elapsed: 0.0,
     };
+}
+
+pub fn bit_substructures(knap: &Knapsack) -> (Vec<f32>, Vec<f32>) {
+    (knap.items.map(|item| item.price).collect(), knap.items.map(|item| item.weight).collect())
 }

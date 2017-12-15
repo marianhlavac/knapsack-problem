@@ -1,13 +1,11 @@
 extern crate time;
+extern crate rand;
+extern crate bit_vec;
 
 mod parser;
-mod solver;
 mod reporter;
-mod solver_recursive;
-mod solver_branchandbound;
-mod solver_dynamic;
-mod solver_fptas;
-mod solver_heuristic;
+mod solvers;
+mod genetic;
 
 use parser::{Knapsack, SolutionType};
 use std::fs::File;
@@ -43,6 +41,7 @@ fn main() {
             'd' => methods.push(SolutionType::Dynamic),
             'f' => methods.push(SolutionType::FPTAS50),
             'h' => methods.push(SolutionType::Heuristic),
+            'e' => methods.push(SolutionType::Evolution),
             _ => (),
         });
         

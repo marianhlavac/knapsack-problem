@@ -14,7 +14,7 @@ where F: Fn(&Vec<bool>) -> usize, C: Fn(&Vec<bool>) -> bool {
     let elitism = 0.1;
     
     // Run for a number of generations
-    for i in 0..10 {
+    for i in 0..100 {
         // Selection
         let mut sorted_population = sort_population(&population, fitness_fn);
         let elitism_mark: usize = (elitism * pop_size as f32) as usize;

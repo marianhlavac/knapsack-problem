@@ -31,6 +31,7 @@ pub fn odds_are(probability: f32) -> bool {
 
 /// Inspects the population in the current state,
 /// outputing the results to the console.
-pub fn inspect(generation: usize, population: Vec<Vec<bool>>) {
-    
+pub fn inspect<F>(generation: usize, fitness_fn: &F) where F: Fn(&Vec<bool>) {
+    let mut pop = sorted_population.clone();
+    pop.truncate(5);
 }

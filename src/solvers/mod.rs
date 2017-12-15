@@ -4,7 +4,7 @@ mod fptas;
 mod heuristic;
 mod recursive;
 
-use parser::{bit_substructures, Knapsack, SolutionType};
+use parser::{sum_of_prices, bit_substructures, Knapsack, SolutionType};
 use genetic;
 use time::PreciseTime as ptime;
 
@@ -21,7 +21,7 @@ pub fn solve(knap: &Knapsack, soltype: SolutionType) -> Knapsack {
         SolutionType::FPTAS25 => fptas::solve(knap.clone(), 0.25),
         SolutionType::FPTAS50 => fptas::solve(knap.clone(), 0.5),
         SolutionType::FPTAS75 => fptas::solve(knap.clone(), 0.75),
-        SolutionType::Evolution => solve_by_evolution(knap.clone(), 8),
+        SolutionType::Evolution => solve_by_evolution(knap.clone(), 24),
         SolutionType::None => knap.clone(),
     };
     
@@ -61,5 +61,6 @@ fn bits_to_knap(bits: Vec<bool>, knap: Knapsack) -> Knapsack {
                     .map(|(i, x)| *x).collect();
     let mut new_knap = knap.clone();
     new_knap.items = new_items;
+    new_knap.price = sum_of_prices(&new_knap.items);
     new_knap
 }

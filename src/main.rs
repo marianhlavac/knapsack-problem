@@ -29,6 +29,7 @@ fn main() {
     
     let delimiter = ",";
     let mut methods = Vec::new();
+    let mut one_limit = false;
     reporter::header_csv(delimiter);
     
     // Check CLI arguments for settings string
@@ -42,6 +43,7 @@ fn main() {
             'f' => methods.push(SolutionType::FPTAS50),
             'h' => methods.push(SolutionType::Heuristic),
             'e' => methods.push(SolutionType::Evolution),
+            '1' => one_limit = true,
             _ => (),
         });
         
@@ -57,9 +59,14 @@ fn main() {
     // Load each instance set file
     for filename in input_files {
         let file = read_file(&filename);
-        let knapsacks: Vec<Knapsack> = file.lines()
+        let mut knapsacks: Vec<Knapsack> = file.lines()
             .map(|line| parser::parse_knapsack(&line.unwrap()))
             .collect();
+            
+        // Limit the count if needed
+        if one_limit {
+            knapsacks.truncate(1);
+        }
             
         // And solve whole set with results reports
         for knapsack in knapsacks {

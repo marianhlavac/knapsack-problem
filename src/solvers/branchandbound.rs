@@ -1,4 +1,4 @@
-use parser::Knapsack;
+use parser::{sum_of_prices, Knapsack};
 use solvers::recursive;
 
 fn solve_recurr(knap: Knapsack, best: &mut u16, reward_left: u16) -> Knapsack {
@@ -30,6 +30,6 @@ fn solve_recurr(knap: Knapsack, best: &mut u16, reward_left: u16) -> Knapsack {
 
 pub fn solve(knap: Knapsack) -> Knapsack {    
     let mut best = 0;
-    let total_reward = recursive::sum_of_prices(&knap.items);
+    let total_reward = sum_of_prices(&knap.items);
     solve_recurr(knap, &mut best, total_reward)
 }

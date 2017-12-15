@@ -32,6 +32,10 @@ fn parse_num(val: &str) -> u16 {
     return val.parse::<u16>().unwrap();
 }
 
+pub fn sum_of_prices(items: &Vec<KnapItem>) -> u16 {
+    items.iter().fold(0, |acc, &x| acc + x.price)
+}
+
 pub fn parse_knapsack(string: &str) -> Knapsack {
     let mut values: Vec<u16> = string.split(char::is_whitespace).map(parse_num).collect();
     let props: Vec<u16> = values.drain(0..3).collect();

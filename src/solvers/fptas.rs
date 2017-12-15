@@ -1,5 +1,5 @@
 use parser::{Knapsack, KnapItem};
-use solver_dynamic;
+use solvers::dynamic;
 use std::f32;
 
 pub fn solve(knap: Knapsack, accuracy: f32) -> Knapsack {
@@ -14,7 +14,7 @@ pub fn solve(knap: Knapsack, accuracy: f32) -> Knapsack {
     } }).collect();
     
     // Solve with dynamic solver
-    let mut solution = solver_dynamic::solve(mod_knap);
+    let mut solution = dynamic::solve(mod_knap);
     
     // Fix the result price
     solution.price = f32::floor(solution.price as f32 * ratio) as u16;

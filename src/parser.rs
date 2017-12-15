@@ -55,6 +55,9 @@ pub fn parse_knapsack(string: &str) -> Knapsack {
     };
 }
 
-pub fn bit_substructures(knap: &Knapsack) -> (Vec<f32>, Vec<f32>) {
-    (knap.items.map(|item| item.price).collect(), knap.items.map(|item| item.weight).collect())
+pub fn bit_substructures(knap: &Knapsack) -> (Vec<u16>, Vec<u16>) {
+    (
+        knap.items.iter().map(|item| item.price).collect(), 
+        knap.items.iter().map(|item| item.weight).collect(),
+    )
 }

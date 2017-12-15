@@ -1,5 +1,5 @@
 use parser::Knapsack;
-use solver_recursive;
+use solvers::recursive;
 
 fn solve_recurr(knap: &Knapsack, mut state: &mut Vec<Vec<u16>>, total_price: u16, total_weight: u16, item_id: usize) {
     // End the recursion
@@ -26,7 +26,7 @@ fn solve_recurr(knap: &Knapsack, mut state: &mut Vec<Vec<u16>>, total_price: u16
 
 pub fn solve(knap: Knapsack) -> Knapsack {
     // Compute state table dimensions
-    let reward_columns = solver_recursive::sum_of_prices(&knap.items) as usize + 1;
+    let reward_columns = recursive::sum_of_prices(&knap.items) as usize + 1;
     let item_rows = knap.items.len();
     
     // Create state memory table

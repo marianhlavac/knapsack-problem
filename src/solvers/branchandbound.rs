@@ -1,12 +1,12 @@
 use parser::Knapsack;
-use solver_recursive;
+use solvers::recursive;
 
 fn solve_recurr(knap: Knapsack, best: &mut u16, reward_left: u16) -> Knapsack {
     // Finish when depth is maximum
     if knap.items.len() <= 0 { return knap; }
     
     // Split knapsacks
-    let (knapsack_with, knapsack_wout) = solver_recursive::split_knapsacks(&knap);
+    let (knapsack_with, knapsack_wout) = recursive::split_knapsacks(&knap);
     
     // Solve recursively, conditioned by b&b
     let mut top = knap.price + reward_left;
@@ -30,6 +30,6 @@ fn solve_recurr(knap: Knapsack, best: &mut u16, reward_left: u16) -> Knapsack {
 
 pub fn solve(knap: Knapsack) -> Knapsack {    
     let mut best = 0;
-    let total_reward = solver_recursive::sum_of_prices(&knap.items);
+    let total_reward = recursive::sum_of_prices(&knap.items);
     solve_recurr(knap, &mut best, total_reward)
 }

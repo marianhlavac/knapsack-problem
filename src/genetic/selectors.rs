@@ -1,21 +1,24 @@
-use bit_vec::BitVec;
-use rand::Rng;
+use genetic::utils;
 
-fn tournament(population: Vec<BitVec>, pool_size: usize = 4) {
+pub fn tournament(population: Vec<Vec<bool>>, pool_size: usize) {
     let pop_size = population.len();
-    let mut pool: BitVec;
+    let mut pool: Vec<Vec<bool>> = Vec::new();
     
     // Select random individuals
     for _ in 0..pool_size {
-        pool.push(random_individual(population));
+        pool.push(utils::random_individual(&population));
     }
     
     // Let them fight! (sort individuals by fitness rank)
-    ///...
+    // ...
 }
 
-fn best(population: Vec<BitVec>, count: usize, fitness_fn: Fn(BitVec) -> f32) -> Vec<BitVec> {
-    let mut sorted_pop = sort_population(population, fitness_fn);
-    sorted_pop.split_off(count);
-    sorted_pop
+pub fn best(sorted_population: Vec<Vec<bool>>, count: usize) -> Vec<Vec<bool>> {
+    // TODO: How to do this with _split ?
+    let mut r: Vec<Vec<bool>> = Vec::new();
+    for i in 0..count {
+        r.push(sorted_population[i].clone());
+    }
+    
+    r
 }

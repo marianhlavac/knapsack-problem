@@ -64,7 +64,7 @@ fn main() {
         // And solve whole set with results reports
         for knapsack in knapsacks {
             for method in &methods {
-                let results = solver::solve(&knapsack, *method);
+                let results = solvers::solve(&knapsack, *method);
                 reporter::report_csv(&results, *method, delimiter);
             }
         }

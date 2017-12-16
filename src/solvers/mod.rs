@@ -21,7 +21,7 @@ pub fn solve(knap: &Knapsack, soltype: SolutionType) -> Knapsack {
         SolutionType::FPTAS25 => fptas::solve(knap.clone(), 0.25),
         SolutionType::FPTAS50 => fptas::solve(knap.clone(), 0.5),
         SolutionType::FPTAS75 => fptas::solve(knap.clone(), 0.75),
-        SolutionType::Evolution => solve_by_evolution(knap.clone(), 24),
+        SolutionType::Evolution => solve_by_evolution(knap.clone(), 150),
         SolutionType::None => knap.clone(),
     };
     

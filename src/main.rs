@@ -30,7 +30,7 @@ fn main() {
     let delimiter = ",";
     let mut methods = Vec::new();
     let mut one_limit = false;
-    reporter::header_csv(delimiter);
+    let mut report = true;
     
     // Check CLI arguments for settings string
     if input_files[0].starts_with("opt:") {
@@ -44,6 +44,7 @@ fn main() {
             'h' => methods.push(SolutionType::Heuristic),
             'e' => methods.push(SolutionType::Evolution),
             '1' => one_limit = true,
+            '!' => report = false,
             _ => (),
         });
         
@@ -54,6 +55,10 @@ fn main() {
             SolutionType::BranchAndBound, 
             SolutionType::Dynamic,
         );
+    }
+    
+    if report {
+        reporter::header_csv(delimiter);
     }
     
     // Load each instance set file
@@ -72,7 +77,9 @@ fn main() {
         for knapsack in knapsacks {
             for method in &methods {
                 let results = solvers::solve(&knapsack, *method);
-                reporter::report_csv(&results, *method, delimiter);
+                if report {
+                    reporter::report_csv(&results, *method, delimiter);
+                }
             }
         }
     }

@@ -8,7 +8,7 @@ pub fn create_population(size: usize, in_size: usize) -> Vec<Vec<bool>> {
 pub fn sort_population<F>(population: &Vec<Vec<bool>>, fitness_fn: &F) -> Vec<Vec<bool>> 
 where F: Fn(&Vec<bool>) -> usize {
     let mut sorted = population.clone();
-    sorted.sort_by(|a, b| fitness_fn(a).cmp(&fitness_fn(b)));
+    sorted.sort_by(|a, b| fitness_fn(b).cmp(&fitness_fn(a)));
     sorted
 }
 
@@ -31,7 +31,11 @@ pub fn odds_are(probability: f32) -> bool {
 
 /// Inspects the population in the current state,
 /// outputing the results to the console.
-pub fn inspect<F>(generation: usize, fitness_fn: &F) where F: Fn(&Vec<bool>) {
+pub fn inspect<F>(generation: usize, sorted_population: &Vec<Vec<bool>>, fitness_fn: &F) where F: Fn(&Vec<bool>) -> usize {
     let mut pop = sorted_population.clone();
     pop.truncate(5);
+    
+    let pop_fitness: Vec<usize> = pop.iter().map(|x| fitness_fn(x)).collect();
+    
+    println!("{}", pop_fitness[0]);
 }

@@ -9,22 +9,25 @@ use self::utils::{odds_are, random_individual, inspect, sort_population};
 pub fn simulate<F, C>(pop_size: usize, chrom_size: usize, fitness_fn: &F, constr_fn: &C) -> Vec<bool>
 where F: Fn(&Vec<bool>) -> usize, C: Fn(&Vec<bool>) -> bool {
     let mut population = utils::create_population(pop_size, chrom_size);
-    let xover_probability = 0.9;
-    let mutation_probability = 0.2;
-    let elitism = 0.05;
+    
+    // Evolution parameters
+    let xover_probability = 0.4;
+    let mutation_probability = 0.1;
+    let elitism_count = 2;
+    let tournament_count = 16;
+    let tournament_pool_size = 2;
     
     // Run for a number of generations
-    for i in 0..250 {
+    for i in 0..500 {
         // Selection
         let mut sorted_population = sort_population(&population, fitness_fn);
-        //inspect(i, &sorted_population, &fitness_fn);
-        let elitism_mark: usize = (elitism * pop_size as f32) as usize;
         
         // Selection
-        let mut new_population = selectors::tournament(&population, 2, 12, fitness_fn);
+        let mut new_population = selectors::tournament(&population, tournament_count, 
+            tournament_pool_size, fitness_fn);
         
         // Elitism
-        sorted_population.truncate(2);
+        sorted_population.truncate(tournament_count);
         new_population.append(&mut sorted_population);
         
         // Fill the rest of population with offsprings

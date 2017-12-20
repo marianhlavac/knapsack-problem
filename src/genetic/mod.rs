@@ -19,7 +19,6 @@ where F: Fn(&Vec<bool>) -> usize, C: Fn(&Vec<bool>) -> bool {
     
     // Run for a number of generations
     for i in 0..500 {
-        // Selection
         let mut sorted_population = sort_population(&population, fitness_fn);
         
         // Selection
